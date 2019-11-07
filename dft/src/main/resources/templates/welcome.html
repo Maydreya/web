@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Продажа велосипедов</title>
+
+
+    <link rel="stylesheet" th:href="@{css/bicycles.css}"/>
+
+</head>
+
+<body>
+<h1>Продажа велосипедов</h1>
+
+<p style="color: green" th:text="${result}"></p>
+
+<div th:each="bicycle, iterStat: ${bicycles}" class="bicycle">
+    <img th:src="'images/' + ${bicycle} + '.jpg'" alt="Bicycle" height = "30%" width="40%" class="center">
+
+    <br>
+
+    <div class="desc">
+
+        <p>
+            Название:
+        </p>
+        <p th:text="${bicycle}"></p>
+
+        <br>
+
+        <p>
+            Цена:
+        </p>
+        <p th:text="${prices[iterStat.index]}"></p>
+
+        <br>
+
+        <form method="get" th:action="@{/sale/{number}(number=${iterStat.index})}" th:id="'submitButton' + ${iterStat.index}">
+        </form>
+
+        <button type="submit" th:form="'submitButton' + ${iterStat.index}" value="Submit">Купить</button>
+    </div>
+
+</div>
+
+
+
+
+
+<!--<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">Wake up, samurai</a>
+</nav>
+
+<main role="main" class="container">
+    <input id="myInput" type="number" />
+    <span id="mySpan"> MySpan </span>
+
+    <div class="starter-template">
+        <h1>Welcome</h1>
+        <h2>
+            <span th:text="'Hello, ' + ${message}"></span>
+        </h2>
+    </div>
+
+    <ol>
+        <li th:each="task : ${tasks}" th:text="${task}"></li>
+    </ol>
+
+</main>
+&lt;!&ndash; /.container &ndash;&gt;
+
+&lt;!&ndash;<script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>&ndash;&gt;
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/my.js}"></script>-->
+</body>
+</html>
