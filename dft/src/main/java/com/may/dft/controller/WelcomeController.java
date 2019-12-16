@@ -1,67 +1,96 @@
 package com.may.dft.controller;
 
-import javafx.scene.control.TextInputControl;
-import org.springframework.beans.factory.annotation.Value;
+import com.may.dft.domain.Bicycles;
+import com.may.dft.domain.Cart;
+import com.may.dft.repos.BicycleRepos;
+import com.may.dft.repos.CartRepos;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 @Controller
 public class WelcomeController {
 
     // inject via application.properties
 
-    private List<String> bicycles  = Arrays.asList("Forward Flash 26", "Forward Next 29", "Forward Sporting 27,5", "Forward Apache 27,5");
-    private List<String> prices = Arrays.asList("13930", "25570", "15090", "17370");
-    private List<String> sales = Arrays.asList("no", "no", "no", "no");
+    ArrayList<String> bicycles_list;
+    ArrayList<Integer> cost_list;
+
+    @Autowired
+    private BicycleRepos bicycleRepos;
+    @Autowired
+    private CartRepos cartRepos;
 
     @GetMapping("/")
-    public String main(Model model, @RequestParam(required=false) boolean success)
-    {
-        if (success)
-        {
-            model.addAttribute("result", "Покупка произведена");
-        }
+    public String main(Map<String, Object> model) {
+        Iterable<Bicycles> bicycles = bicycleRepos.findAll();
 
-        List<String> filteredBicycles = new ArrayList<>();
-        List<String> filteredPrices = new ArrayList<>();
-
-        for (int i = 0; i < bicycles.size(); i++)
-        {
-            if (sales.get(i).equals("no"))
-            {
-                filteredBicycles.add(bicycles.get(i));
-                filteredPrices.add(prices.get(i));
-            }
-        }
-
-        model.addAttribute("bicycles", filteredBicycles);
-        model.addAttribute("prices", filteredPrices);
+        model.put("bicycle", bicycles);
 
         return "welcome";
     }
 
-    @GetMapping("/sale/{number}")
-    public String sale(Model model, @PathVariable("number") int number)
-    {
-        model.addAttribute("bicyclePrice", prices.get(number));
-        model.addAttribute("bicycleId", number);
-        return "sale";
+    @PostMapping("/")
+    public @ResponseBody
+    String addNewItem(@RequestParam String name, @RequestParam Integer cost, Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        bicycles_list = (ArrayList<String>) session.getAttribute("bicycles_list");
+        cost_list = (ArrayList<Integer>) session.getAttribute("cost_list");
+        if (bicycles_list == null && cost_list == null) {
+            bicycles_list = new ArrayList<>();
+            cost_list = new ArrayList<>();
+        }
+        assert bicycles_list != null;
+        bicycles_list.add(name);
+        cost_list.add(cost);
+        session.setAttribute("bicycles_list", bicycles_list);
+        session.setAttribute("cost_list", cost_list);
+        return "welcome";
     }
 
-    // /hello?name=kotlin
-    @PostMapping("/sale/{bicycleId}")
-    public String rentPost(@PathVariable("bicycleId") int id)
-    {
-        sales.set(id, "yes");
-        return "redirect:/?success=true";
+    @PostMapping("/cart")
+    public @ResponseBody
+    String deleteItem(@RequestParam int id, Map<String, Object> model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        bicycles_list = (ArrayList<String>) session.getAttribute("bicycles_list");
+        cost_list = (ArrayList<Integer>) session.getAttribute("cost_list");
+        bicycles_list.remove(id);
+        cost_list.remove(id);
+        session.setAttribute("bicycles_list", bicycles_list);
+        session.setAttribute("cost_list", cost_list);
+
+        return "cart";
+    }
+    @PostMapping("/addbase")
+    public @ResponseBody
+    String addbase() {
+        for(int i = 0; i < bicycles_list.size(); i++)
+        {
+            Cart cart = new Cart();
+            cart.setName(bicycles_list.get(i));
+            cart.setPrice(cost_list.get(i));
+            cartRepos.save(cart);
+        }
+        return "base";
     }
 
+    @GetMapping("/cart")
+    public String maincart(Map<String, Object> model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        ArrayList<String> carts = (ArrayList<String>) session.getAttribute("bicycles_list");
+        ArrayList<Integer> costs = (ArrayList<Integer>) session.getAttribute("cost_list");
+        model.put("carts", carts);
+        model.put("costs", costs);
+
+        return "cart";
+    }
 }

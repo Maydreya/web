@@ -1,42 +1,74 @@
-body
-{
+body {
     background-color: #0f2d3b;
-    margin: 0 25%;
+    width: 100%;
+    margin: 0 auto;
     font-family: "Segoe UI";
 }
 
-h1
-{
+h1 {
     color: #ffffff;
     text-align: center;
     font-family: "Segoe UI";
     font-weight: normal;
 }
 
-.bicycle
+table {
+    border: 1px solid #ff824f;
+    width: 1000px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    color: white;
+}
+
+table td {
+    border: 1px solid #ff824f;
+    padding: 10px;
+    text-align: center;
+}
+#Cart {
+    float: right;
+    margin-right: 50px;
+}
+
+table th {
+    border: 2px solid #ff824f;
+    padding: 10px;
+}
+#filter {
+    border: 2px solid #ff824f;
+}
+#city {
+    border: 2px solid #ff824f;
+}
+.form-control {
+    width: 250px;
+}
+.input-group {
+    width: 200px;
+    margin: 0 auto;
+}
+
+/*.bicycle
 {
     border: 1px solid #ff824f;
     background-color: #ffffff;
     margin: 5%;
     padding: 5%;
-}
+}*/
 
-.desc
-{
+.desc {
     display: block;
     margin-left: 5%;
     margin-top: 0%;
     margin-bottom: 0%;
 }
 
-.desc p
-{
+.desc p {
     margin-top: 0%;
     margin-bottom: 0%;
 }
 
-.center
-{
+.center {
     display: block;
     margin-top: 5%;
     margin-left: auto;
