@@ -18,41 +18,42 @@
     </a>
 </div>
 <h1>Продажа велосипедов</h1>
+<div class="block">
+    <input type="text" class="form-control" placeholder="Поиск товара..." id="search-text"
+           aria-describedby="basic-addon1" onkeyup="tableSearch()"/>
+    <select name="city" id="city">
+        <option value="Пермь">Пермь</option>
+        <option value="Москва">Москва</option>
+        <option value="Санкт-Петербург">Санкт-Петербург</option>
+        <option value="Сочи">Сочи</option>
+    </select>
+</div>
 <div>
-<table id="table">
-    <tr>
-        <th id="filter">
-            <input type="text" class="form-control" placeholder="Поиск товара..." id="search-text" aria-describedby="basic-addon1" onkeyup="tableSearch()" />
-        </th>
-        <th>
-            <select name="city" id="city">
-                <option value="Пермь">Пермь</option>
-                <option value="Москва">Москва</option>
-                <option value="Санкт-Петербург">Санкт-Петербург</option>
-                <option value="Сочи">Сочи</option>
-            </select>
-        </th>
-    </tr>
-    <tr>
-        <th>Photo</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Description</th>
-        <th>Buy</th>
-    </tr>
-    <tr th:each="item : ${bicycle}" class="table-data">
-        <td width="40%"><img th:src="'images/' + ${item.name} + '.jpg'" alt="Bicycle" height = "15%" width="20%" class="center"></td>
-        <td width="20%" class="bicyclename" th:text="${item.name}"></td>
-        <td class="bicyclecost" th:text="${item.cost}"></td>
-        <td th:text="${item.description}"></td>
-        <td> <input type="submit" class="add_item" value="Добавить" ></td>
-    </tr>
-</table>
+    <table id="table">
+        <thead>
+        <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Buy</th>
+        </tr>
+        </thead>
+        <tr th:each="item : ${bicycle}" class="table-data">
+            <td width="40%"><img th:src="'images/' + ${item.name} + '.jpg'" alt="Bicycle" height="15%" width="20%"
+                                 class="center"></td>
+            <td width="20%" class="bicyclename" th:text="${item.name}"></td>
+            <td class="bicyclecost" th:text="${item.cost}"></td>
+            <td th:text="${item.description}"></td>
+            <td><input type="submit" class="add_item" value="Добавить"></td>
+        </tr>
+    </table>
 </div>
 
 <script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/tablesort.min.js"></script>
 <script type="text/javascript" th:src="@{../js/my.js}"></script>
 
 <!--<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>-->

@@ -76,6 +76,13 @@ function loaddb(){
         url: "/addbase",
         dataType: "json",
     });
+    alert("Заказ сделан")
+    let table = document.getElementById('table2');
+    for(let i = 1; i < table.rows.length-1; i++) {
+        table.rows[i].remove();
+        i--;
+    }
+    $("#FinalPrice").text(0);
 }
 
 let city = readCookie("City");
@@ -114,3 +121,5 @@ $(document).ready(function check() {
     }
     $("#FinalPrice").text(price);
 });
+
+/*Tablesort(document.getElementById('table'));*/

@@ -22,9 +22,6 @@ public class WelcomeController {
 
     // inject via application.properties
 
-    ArrayList<String> bicycles_list;
-    ArrayList<Integer> cost_list;
-
     @Autowired
     private BicycleRepos bicycleRepos;
     @Autowired
@@ -43,8 +40,8 @@ public class WelcomeController {
     public @ResponseBody
     String addNewItem(@RequestParam String name, @RequestParam Integer cost, Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        bicycles_list = (ArrayList<String>) session.getAttribute("bicycles_list");
-        cost_list = (ArrayList<Integer>) session.getAttribute("cost_list");
+        ArrayList<String> bicycles_list = (ArrayList<String>) session.getAttribute("bicycles_list");
+        ArrayList<Integer> cost_list = (ArrayList<Integer>) session.getAttribute("cost_list");
         if (bicycles_list == null && cost_list == null) {
             bicycles_list = new ArrayList<>();
             cost_list = new ArrayList<>();
@@ -61,8 +58,8 @@ public class WelcomeController {
     public @ResponseBody
     String deleteItem(@RequestParam int id, Map<String, Object> model, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        bicycles_list = (ArrayList<String>) session.getAttribute("bicycles_list");
-        cost_list = (ArrayList<Integer>) session.getAttribute("cost_list");
+        ArrayList<String> bicycles_list = (ArrayList<String>) session.getAttribute("bicycles_list");
+        ArrayList<Integer> cost_list = (ArrayList<Integer>) session.getAttribute("cost_list");
         bicycles_list.remove(id);
         cost_list.remove(id);
         session.setAttribute("bicycles_list", bicycles_list);
@@ -72,7 +69,10 @@ public class WelcomeController {
     }
     @PostMapping("/addbase")
     public @ResponseBody
-    String addbase() {
+    String addbase(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        ArrayList<String> bicycles_list = (ArrayList<String>) session.getAttribute("bicycles_list");
+        ArrayList<Integer> cost_list = (ArrayList<Integer>) session.getAttribute("cost_list");
         for(int i = 0; i < bicycles_list.size(); i++)
         {
             Cart cart = new Cart();
@@ -80,7 +80,19 @@ public class WelcomeController {
             cart.setPrice(cost_list.get(i));
             cartRepos.save(cart);
         }
+        clearbase(request);
         return "base";
+    }
+
+
+    public void clearbase(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        ArrayList<String> bicycles_list = (ArrayList<String>) session.getAttribute("bicycles_list");
+        ArrayList<Integer> cost_list = (ArrayList<Integer>) session.getAttribute("cost_list");
+        bicycles_list.clear();
+        cost_list.clear();
+        session.setAttribute("bicycles_list", bicycles_list);
+        session.setAttribute("cost_list", cost_list);
     }
 
     @GetMapping("/cart")

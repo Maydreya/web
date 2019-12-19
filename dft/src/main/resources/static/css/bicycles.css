@@ -11,6 +11,10 @@ h1 {
     font-family: "Segoe UI";
     font-weight: normal;
 }
+.block {
+    width: 1000px;
+    margin: 0 auto 20px;
+}
 
 table {
     border: 1px solid #ff824f;
@@ -19,7 +23,6 @@ table {
     border-collapse: collapse;
     color: white;
 }
-
 table td {
     border: 1px solid #ff824f;
     padding: 10px;
@@ -47,14 +50,6 @@ table th {
     width: 200px;
     margin: 0 auto;
 }
-
-/*.bicycle
-{
-    border: 1px solid #ff824f;
-    background-color: #ffffff;
-    margin: 5%;
-    padding: 5%;
-}*/
 
 .desc {
     display: block;
